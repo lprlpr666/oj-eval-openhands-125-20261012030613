@@ -44,6 +44,12 @@ public:
     bool connected(int x, int y) {
         return find(x) == find(y);
     }
+    
+    // Clear the UnionFind structure for the next test case
+    void clear() {
+        parent.clear();
+        rank.clear();
+    }
 };
 
 int main() {
@@ -58,16 +64,16 @@ int main() {
         cin >> n;
         
         vector<pair<pair<int, int>, int>> constraints;
-        constraints.reserve(n);  // Reserve space to avoid reallocations
+        constraints.reserve(n);
         
-        UnionFind uf;
-        
-        // Read all constraints
+        // Read all constraints first
         for (int i = 0; i < n; i++) {
             int x, y, e;
             cin >> x >> y >> e;
             constraints.emplace_back(make_pair(x, y), e);
         }
+        
+        UnionFind uf;
         
         // First pass: process all equality constraints
         for (const auto& constraint : constraints) {
@@ -96,6 +102,9 @@ int main() {
         }
         
         cout << (valid ? "YES" : "NO") << '\n';
+        
+        // Clear the UnionFind for the next test case
+        uf.clear();
     }
     
     return 0;
