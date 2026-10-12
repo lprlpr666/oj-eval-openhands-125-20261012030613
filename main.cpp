@@ -58,17 +58,19 @@ int main() {
         cin >> n;
         
         vector<pair<pair<int, int>, int>> constraints;
+        constraints.reserve(n);  // Reserve space to avoid reallocations
+        
         UnionFind uf;
         
         // Read all constraints
         for (int i = 0; i < n; i++) {
             int x, y, e;
             cin >> x >> y >> e;
-            constraints.push_back({{x, y}, e});
+            constraints.emplace_back(make_pair(x, y), e);
         }
         
         // First pass: process all equality constraints
-        for (auto& constraint : constraints) {
+        for (const auto& constraint : constraints) {
             int x = constraint.first.first;
             int y = constraint.first.second;
             int e = constraint.second;
@@ -80,7 +82,7 @@ int main() {
         
         // Second pass: check all inequality constraints
         bool valid = true;
-        for (auto& constraint : constraints) {
+        for (const auto& constraint : constraints) {
             int x = constraint.first.first;
             int y = constraint.first.second;
             int e = constraint.second;
