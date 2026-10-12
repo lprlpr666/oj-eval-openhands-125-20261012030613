@@ -1,14 +1,14 @@
 #include <iostream>
 #include <vector>
-#include <unordered_map>
+#include <map>
 #include <algorithm>
 
 using namespace std;
 
 class UnionFind {
 private:
-    unordered_map<int, int> parent;
-    unordered_map<int, int> rank;
+    map<int, int> parent;
+    map<int, int> rank;
     
 public:
     int find(int x) {
@@ -45,7 +45,6 @@ public:
         return find(x) == find(y);
     }
     
-    // Clear the UnionFind structure for the next test case
     void clear() {
         parent.clear();
         rank.clear();
@@ -63,36 +62,28 @@ int main() {
         int n;
         cin >> n;
         
-        vector<pair<pair<int, int>, int>> constraints;
+        // Read all constraints
+        vector<tuple<int, int, int>> constraints;
         constraints.reserve(n);
         
-        // Read all constraints first
         for (int i = 0; i < n; i++) {
             int x, y, e;
             cin >> x >> y >> e;
-            constraints.emplace_back(make_pair(x, y), e);
+            constraints.emplace_back(x, y, e);
         }
         
         UnionFind uf;
         
-        // First pass: process all equality constraints
-        for (const auto& constraint : constraints) {
-            int x = constraint.first.first;
-            int y = constraint.first.second;
-            int e = constraint.second;
-            
+        // Process all equality constraints first
+        for (const auto& [x, y, e] : constraints) {
             if (e == 1) {  // x == y
                 uf.unite(x, y);
             }
         }
         
-        // Second pass: check all inequality constraints
+        // Check all inequality constraints
         bool valid = true;
-        for (const auto& constraint : constraints) {
-            int x = constraint.first.first;
-            int y = constraint.first.second;
-            int e = constraint.second;
-            
+        for (const auto& [x, y, e] : constraints) {
             if (e == 0) {  // x != y
                 if (uf.connected(x, y)) {
                     valid = false;
@@ -103,7 +94,6 @@ int main() {
         
         cout << (valid ? "YES" : "NO") << '\n';
         
-        // Clear the UnionFind for the next test case
         uf.clear();
     }
     
