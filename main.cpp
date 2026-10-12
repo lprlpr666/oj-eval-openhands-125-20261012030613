@@ -1,7 +1,6 @@
-#include <iostream>
+#include <cstdio>
 #include <vector>
 #include <map>
-#include <algorithm>
 
 using namespace std;
 
@@ -52,30 +51,31 @@ public:
 };
 
 int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
-    
     int t;
-    cin >> t;
+    scanf("%d", &t);
     
     while (t--) {
         int n;
-        cin >> n;
+        scanf("%d", &n);
         
         // Read all constraints
-        vector<tuple<int, int, int>> constraints;
+        vector<pair<pair<int, int>, int>> constraints;
         constraints.reserve(n);
         
         for (int i = 0; i < n; i++) {
             int x, y, e;
-            cin >> x >> y >> e;
-            constraints.emplace_back(x, y, e);
+            scanf("%d %d %d", &x, &y, &e);
+            constraints.push_back({{x, y}, e});
         }
         
         UnionFind uf;
         
         // Process all equality constraints first
-        for (const auto& [x, y, e] : constraints) {
+        for (const auto& constraint : constraints) {
+            int x = constraint.first.first;
+            int y = constraint.first.second;
+            int e = constraint.second;
+            
             if (e == 1) {  // x == y
                 uf.unite(x, y);
             }
@@ -83,7 +83,11 @@ int main() {
         
         // Check all inequality constraints
         bool valid = true;
-        for (const auto& [x, y, e] : constraints) {
+        for (const auto& constraint : constraints) {
+            int x = constraint.first.first;
+            int y = constraint.first.second;
+            int e = constraint.second;
+            
             if (e == 0) {  // x != y
                 if (uf.connected(x, y)) {
                     valid = false;
@@ -92,7 +96,11 @@ int main() {
             }
         }
         
-        cout << (valid ? "YES" : "NO") << '\n';
+        if (valid) {
+            printf("YES\n");
+        } else {
+            printf("NO\n");
+        }
         
         uf.clear();
     }
